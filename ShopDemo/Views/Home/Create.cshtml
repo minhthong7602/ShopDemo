@@ -1,0 +1,62 @@
+﻿@model ShopDemo.Web.Models.CreateOrderModel
+
+@{
+    ViewData["Title"] = "Create New Order";
+}
+
+<h2>Create New Order</h2>
+
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="OrderName" class="control-label">Order Name</label>
+                <input asp-for="OrderName" class="form-control" />
+                <span asp-validation-for="OrderName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ProductId" class="control-label">Product</label>
+                <select asp-for="ProductId" class="form-control" asp-items="(List<SelectListItem>)@ViewData["Products"]">
+                    <option value="">Please choose product</option>
+                </select>
+                <span asp-validation-for="ProductId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                 <label asp-for="CustomerId" class="control-label">Customer</label>
+                <select asp-for="CustomerId" class="form-control" asp-items="(List<SelectListItem>)@ViewData["Customers"]">
+                    <option value="">Please choose customer</option>
+                </select>
+                <span asp-validation-for="CustomerId" class="text-danger"></span>
+            </div>
+
+            
+            <div class="form-group">
+                <label asp-for="OrderDate" class="control-label">Order Date</label>
+                <input asp-for="OrderDate" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" />
+                <span asp-validation-for="OrderDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Amount" class="control-label"></label>
+                <input asp-for="Amount" class="form-control" type="number" />
+                <span asp-validation-for="Amount" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create Order" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

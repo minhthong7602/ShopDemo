@@ -1,0 +1,130 @@
+﻿@model PaginatedList<ShopDemo.Infrastructure.DTO.OrderViewDTO>
+@using System.Linq;
+@using ShopDemo.Web.Models
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row">
+    <div class="search input-group col-md-12">
+        <form asp-action="Index" method="get" class="form-inline">
+            <div class="form-group">
+                <label for="keyword">Enter category to search</label>
+                <input id="keyword" type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" name="keyword" value="@ViewData["keyword"]" />
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </form>
+
+        <a href="/Account/Signout">
+            <button class="btn btn-secondary">Sign Out</button>
+        </a>
+    </div>
+
+    <div class="col-md-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        <a asp-action="Index" asp-route-sortOrder="@ViewData["productSort"]" asp-route-keyword="@ViewData["keyword"]">Product Name</a>
+                    </th>
+                    <th>
+                        <a asp-action="Index" asp-route-sortOrder="@ViewData["categorySort"]" asp-route-keyword="@ViewData["keyword"]">Category Name</a>
+                    </th>
+                    <th>
+                        <a asp-action="Index" asp-route-sortOrder="@ViewData["customerSort"]" asp-route-keyword="@ViewData["keyword"]">Customer Name</a>
+                    </th>
+                    <th>
+                        Order Date
+                    </th>
+                    <th>
+                        Amount
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ProductName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CategoryName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CustomerName)
+                            </td>
+                            <td>
+                                @item.OrderDate.ToString("dd-MMM-yyyy")
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Amount)
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr colspan="4">
+                        <td>Order not found</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @{
+        var prevDisabled = Model.HasPreviousPage ? "" : "disabled";
+        var nextDisabled = Model.HasNextPage ? "" : "disabled";
+    }
+   
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["currentSort"]"
+       asp-route-page="1"
+       asp-route-keyword="@ViewData["keyword"]"
+       class="btn btn-default">
+        First
+    </a>
+
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["currentSort"]"
+       asp-route-page="@(Model.PageIndex - 1)"
+       asp-route-keyword="@ViewData["keyword"]"
+       class="btn btn-default @prevDisabled">
+        Previous
+    </a>
+
+    @for (var i = 1; i <= Model.TotalPages; i++)
+    {
+       <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["currentSort"]"
+       asp-route-page="@i"
+       asp-route-keyword="@ViewData["keyword"]"
+       class="btn btn-default @(Model.PageIndex == i ? "disabled" : "")">
+        @i
+    </a> 
+    }
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["currentSort"]"
+       asp-route-page="@(Model.PageIndex + 1)"
+       asp-route-keyword="@ViewData["keyword"]"
+       class="btn btn-default @nextDisabled">
+        Next
+    </a>
+
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["currentSort"]"
+       asp-route-page="@Model.TotalPages"
+       asp-route-keyword="@ViewData["keyword"]"
+       class="btn btn-default">
+        Last
+    </a>
+</div>
+
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
